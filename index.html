@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        
+        <title>
+            PHP SSE by WillyPT 
+        </title>    
+    </head>
+    <body>
+        <div class="alert alert-warning out" role="alert" id="runprogressbar">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Warning:</span>
+            <span id='updatemessage'>Click on this box to run the progress bar</span>
+            
+            <div class="progress" id="progressupdate" style="display:none">
+              <div class="progress-bar progress-bar-warning progress-bar-striped active" id="progressbarupdate" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                <span class="sr-only"><span id="sronlytext">0%</span> Complete</span>
+              </div>
+            </div>
+        </div>
+
+
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+        <script>
+        $('#runprogressbar').click(function(){
+            var t = window.open("process-write.php", "Update Process");
+            $('#progressupdate').show();
+            $('#updatemessage').html('Running Process');
+            var es = new EventSource("process-view.php");
+            es.addEventListener("message", function(e) {
+                console.log(e.data);
+                var c = Math.floor(e.data);
+                $('#progressbarupdate').attr('aria-valuenow', c);
+                $('#progressbarupdate').css('width', c + "%");
+                $('#sronlytext').html(c + "%");
+
+                if(c == 100){
+                    $('#updatemessage').html('Process Done');
+                    t.close();
+                }
+            }, false);
+            
+        });
+        </script>
+    </body>
+</html>
