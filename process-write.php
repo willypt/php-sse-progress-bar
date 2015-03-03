@@ -2,7 +2,7 @@
 
 include 'FileProc.php';
 set_time_limit(0); //this is important!
-$file = (isset($_GET['filename']))?$_GET['filename'] : 'process_run.loadingbar'; 
+$file = (isset($_GET['filename']))?$_GET['filename'] : 'process_run'; 
 $filename = "$file.loadingbar";
 if(!FileProc::exists($filename)){
 	//You can modify the logic for printing the values
